@@ -1,7 +1,7 @@
 import logging
 
 from alaaarm.pushover import api as pushover_api
-from alaaarm.pushover import msg
+from alaaarm.pushover import frame
 
 
 log = logging.getLogger()
@@ -44,7 +44,7 @@ class PushoverClient():
 
         return response.json()
 
-    def wait_for_messages(self, handler):
+    def wait_for_frames(self, handler):
         while True:
             with pushover_api.websocket() as ws:
                 ws.send('login:{device_id}:{secret}\n'.format(
@@ -54,17 +54,17 @@ class PushoverClient():
                 while True:
                     response = ws.recv()
                     handler(response)
-                    if response == msg.RELOAD:
+                    if response == frame.RELOAD:
                         # reload request, reconnect
                         log.warning('received reload request, reconnecting')
                         break
-                    if response == msg.ERROR:
+                    if response == frame.ERROR:
                         # permanent error, terminate
                         log.warning('received permanent error, '
-                                    'stop message processing')
+                                    'stop frame processing')
                         return
-                    if response == msg.ANOTHER_SESSION:
+                    if response == frame.ANOTHER_SESSION:
                         # session closed, terminate
                         log.warning('another session was started, '
-                                    'stop message processing')
+                                    'stop frame processing')
                         return

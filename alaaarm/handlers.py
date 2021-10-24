@@ -1,24 +1,24 @@
 import logging
 
-from alaaarm.pushover import msg
+from alaaarm.pushover import frame
 
 
 log = logging.getLogger()
 
 
-messages = {
-    msg.KEEP_ALIVE: 'KEEP ALIVE',
-    msg.NEW_MESSAGE: 'NEW MESSAGE',
-    msg.RELOAD: 'RELOAD',
-    msg.ERROR: 'ERROR',
-    msg.ANOTHER_SESSION: 'ANOTHER SESSION'
+frames = {
+    frame.KEEP_ALIVE: 'KEEP ALIVE',
+    frame.NEW_MESSAGE: 'NEW MESSAGE',
+    frame.RELOAD: 'RELOAD',
+    frame.ERROR: 'ERROR',
+    frame.ANOTHER_SESSION: 'ANOTHER SESSION'
 }
 
 
-def echo_handler(message):
-    print(messages.get(message, 'Unknown message: {}'.format(message)))
+def echo_handler(frm):
+    print(frames.get(frm, 'Unknown frame: {}'.format(frm)))
 
 
-def log_handler(message):
-    log.info('received message: %s',
-             messages.get(message, 'Unknown message: {}'.format(message)))
+def log_handler(frm):
+    log.info('received frame: %s',
+             frames.get(frm, 'Unknown frame ({})'.format(frm)))
