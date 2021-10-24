@@ -1,5 +1,10 @@
+import logging
+
 from alaaarm.pushover import api as pushover_api
 from alaaarm.pushover import msg
+
+
+log = logging.getLogger()
 
 
 class PushoverClient():
@@ -51,10 +56,15 @@ class PushoverClient():
                     handler(response)
                     if response == msg.RELOAD:
                         # reload request, reconnect
+                        log.warning('received reload request, reconnecting')
                         break
                     if response == msg.ERROR:
                         # permanent error, terminate
+                        log.warning('received permanent error, '
+                                    'stop message processing')
                         return
                     if response == msg.ANOTHER_SESSION:
                         # session closed, terminate
+                        log.warning('another session was started, '
+                                    'stop message processing')
                         return
