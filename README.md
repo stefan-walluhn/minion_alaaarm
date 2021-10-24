@@ -6,6 +6,10 @@ Ceate `config.json`:
 
 ```
 {
+    "syslog": {
+        "host": "127.0.0.1",
+        "port": 514
+    },
     "pushover": {
         "email": "your@pushover.email",
         "password": "your_pushover_password"
