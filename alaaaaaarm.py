@@ -11,12 +11,14 @@ log = logging.getLogger()
 
 
 if __name__ == '__main__':
-    log.addHandler(
-        SyslogHandler(dest=socket.getaddrinfo(config['syslog']['host'],
-                                              config['syslog']['port']))
-    )
+    if 'syslog' in config:
+        syslog_server = socket.getaddrinfo(config['syslog']['host'],
+                                           config['syslog']['port'])
+        log.addHandler(SyslogHandler(dest=syslog_server))
+
     pcl = PushoverClient(config['pushover']['email'],
                          config['pushover']['password'])
+
     log.info('starting PushOver client, wait for WebSocket frames')
     pcl.wait_for_frames(log_handler)
     log.critical('PushOver client finished')
