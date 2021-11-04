@@ -1,4 +1,4 @@
-import logging
+import ulogging as logging
 
 from alaaarm.pushover import frame
 

@@ -5,7 +5,7 @@ Based very heavily off
 https://github.com/aaugustin/websockets/blob/master/websockets/client.py
 """
 
-import logging
+import ulogging as logging
 import usocket as socket
 import ubinascii as binascii
 import urandom as random

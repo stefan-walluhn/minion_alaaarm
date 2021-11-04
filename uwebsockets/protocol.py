@@ -2,7 +2,7 @@
 Websockets protocol
 """
 
-import logging
+import ulogging as logging
 import ure as re
 import ustruct as struct
 import urandom as random

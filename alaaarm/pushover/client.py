@@ -1,19 +1,23 @@
-import logging
+try:
+    import logging
+except:
+    import ulogging as logging
 
 from alaaarm.pushover import api as pushover_api
 from alaaarm.pushover import frame
+from alaaarm.pushover.exceptions import DeviceRegistrationError
 
 
 log = logging.getLogger()
 
 
 class PushoverClient():
-    def __init__(self, email, password):
+    def __init__(self, email, password, device_id=None):
         self.email = email
         self.password = password
 
         self._secret = None
-        self._device_id = None
+        self._device_id = device_id
 
     @property
     def secret(self):
@@ -29,10 +33,15 @@ class PushoverClient():
     def device_id(self):
         # XXX device `python_test` must not exists!
         if not self._device_id:
-            self._device_id = pushover_api.post(
+            response = pushover_api.post(
                 'devices.json',
                 data={'secret': self.secret, 'name': 'python_test', 'os': 'O'}
-            ).json()['id']
+            ).json()
+
+            if response['status'] == 0:
+                raise DeviceRegistrationError(response['errors'])
+
+            self._device_id = response['id']
 
         return self._device_id
 

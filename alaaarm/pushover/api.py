@@ -1,6 +1,7 @@
-import uwebsockets.client
-
-from alaaarm import requests
+try:
+    from alaaarm import requests
+except ModuleNotFoundError:
+    import requests
 
 
 API_URL = 'https://api.pushover.net/1'
@@ -19,4 +20,6 @@ def post(endpoint, *args, **kwargs):
 
 
 def websocket():
-    return uwebsockets.client.connect('wss://client.pushover.net/push')
+    from  uwebsockets import client
+
+    return client.connect('wss://client.pushover.net/push')

@@ -1,4 +1,4 @@
-import logging
+import ulogging as logging
 import usocket as socket
 
 from alaaarm.config import config
@@ -17,7 +17,8 @@ if __name__ == '__main__':
         log.addHandler(SyslogHandler(dest=syslog_server))
 
     pcl = PushoverClient(config['pushover']['email'],
-                         config['pushover']['password'])
+                         config['pushover']['password'],
+                         device_id=config['pushover']['device_id'])
 
     log.info('starting PushOver client, wait for WebSocket frames')
     pcl.wait_for_frames(log_handler)
