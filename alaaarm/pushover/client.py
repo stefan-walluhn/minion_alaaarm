@@ -54,6 +54,10 @@ class PushoverClient():
         return response.json()
 
     def wait_for_frames(self, handler):
+        # pre-fetch data to reduce parallel ssl connections
+        self.device_id
+        self.secret
+
         while True:
             with pushover_api.websocket() as ws:
                 ws.send('login:{device_id}:{secret}\n'.format(
