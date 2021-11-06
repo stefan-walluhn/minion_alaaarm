@@ -1,3 +1,4 @@
+import time
 import ulogging as logging
 
 from alaaarm.pushover import frame
@@ -22,6 +23,16 @@ def echo_handler(frm):
 def log_handler(frm):
     log.info('received frame: %s',
              frames.get(frm, 'Unknown frame ({})'.format(frm)))
+
+
+def pin_handler(pin):
+    def _handler(frm):
+        if frm == frame.NEW_MESSAGE:
+            pin.on()
+            time.sleep(5)
+            pin.off()
+
+    return _handler
 
 
 def watchdog_handler(dog):

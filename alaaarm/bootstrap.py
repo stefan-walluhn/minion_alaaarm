@@ -1,0 +1,42 @@
+import ulogging as logging
+import usocket as socket
+
+
+log = logging.getLogger()
+
+
+def init_pin(pin_number):
+    try:
+        from machine import Pin, Signal
+    except ImportError:
+        log.warning('there is no hardware pin, use dummy implementation')
+        from alaaarm.pin import DummyPin as Pin, DummySignal as Signal
+
+    raw_pin = Pin(pin_number, Pin.OUT)
+    pin = Signal(raw_pin, invert=True)
+    pin.off()
+
+    return pin
+
+
+def init_syslog(host, port):
+    from alaaarm.logging import SyslogHandler
+
+    syslog_server = socket.getaddrinfo(host, port)
+    log.addHandler(SyslogHandler(dest=syslog_server))
+
+
+def init_watchdog(timeout):
+    try:
+        from machine import WDT
+    except ImportError:
+        log.warning('there is no hardware watchdog, use dummy implementation')
+        from alaaarm.watchdog import DummyWatchdog as WDT
+
+    return WDT(timeout=timeout)
+
+
+def init_wifi(essed, password):
+    from alaaarm import wifi
+
+    wifi.connect(essid, password)

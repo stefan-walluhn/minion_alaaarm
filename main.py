@@ -1,33 +1,33 @@
 import ulogging as logging
-import usocket as socket
 
-from alaaarm import wifi
+from alaaarm import bootstrap
 from alaaarm.config import config
 from alaaarm.handlers import (log_handler,
+                              pin_handler,
                               watchdog_handler,
                               multiplex_handler)
-from alaaarm.logging import SyslogHandler
 from alaaarm.pushover.client import PushoverClient
-from alaaarm.watchdog import get_watchdog
 
 
 WATCHDOG_TIMEOUT_MINUTE = 2
+ALARM_GPIO = 10
 
 
 log = logging.getLogger()
 
 
 def run():
-    dog = get_watchdog()(timeout=WATCHDOG_TIMEOUT_MINUTE * 60 * 1000)
+    alarm_pin = bootstrap.init_pin(ALARM_GPIO)
+    dog = bootstrap.init_watchdog(WATCHDOG_TIMEOUT_MINUTE * 60 * 1000)
 
     if 'wifi' in config:
-        wifi.connect(config['wifi']['essid'], config['wifi']['password'])
+        bootstrap.init_wifi(config['wifi']['essid'],
+                            config['wifi']['password'])
         dog.feed()
 
     if 'syslog' in config:
-        syslog_server = socket.getaddrinfo(config['syslog']['host'],
-                                           config['syslog']['port'])
-        log.addHandler(SyslogHandler(dest=syslog_server))
+        bootstrap.init_syslog(config['syslog']['host'],
+                              config['syslog']['port'])
         dog.feed()
 
     pcl = PushoverClient(config['pushover']['email'],
@@ -35,7 +35,7 @@ def run():
                          config['pushover']['device_name'],
                          device_id=config['pushover']['device_id'])
 
-    handlers = [log_handler, watchdog_handler(dog)]
+    handlers = [log_handler, pin_handler(alarm_pin), watchdog_handler(dog)]
 
     log.info('starting Pushover client')
     pcl.delete_messages()
