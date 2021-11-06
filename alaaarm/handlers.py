@@ -24,6 +24,14 @@ def log_handler(frm):
              frames.get(frm, 'Unknown frame ({})'.format(frm)))
 
 
+def watchdog_handler(dog):
+    def _handler(frm):
+        if frm == frame.KEEP_ALIVE:
+            dog.feed()
+
+    return _handler
+
+
 def multiplex_handler(handlers):
     def _handler(frm):
         for handler in handlers:
