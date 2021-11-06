@@ -1,4 +1,3 @@
-import uio as io
 import usocket as socket
 
 

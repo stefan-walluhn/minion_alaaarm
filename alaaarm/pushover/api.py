@@ -20,6 +20,6 @@ def post(endpoint, *args, **kwargs):
 
 
 def websocket():
-    from  uwebsockets import client
+    from uwebsockets import client
 
     return client.connect('wss://client.pushover.net/push')

@@ -1,6 +1,6 @@
 try:
     import logging
-except:
+except ImportError:
     import ulogging as logging
 
 from alaaarm.pushover import api as pushover_api
