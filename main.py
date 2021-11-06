@@ -3,7 +3,7 @@ import usocket as socket
 
 from alaaarm import wifi
 from alaaarm.config import config
-from alaaarm.handlers import log_handler
+from alaaarm.handlers import log_handler, echo_handler, multiplex_handler
 from alaaarm.logging import SyslogHandler
 from alaaarm.pushover.client import PushoverClient
 
@@ -26,7 +26,7 @@ def run():
 
     log.info('starting Pushover client')
     pcl.delete_messages()
-    pcl.wait_for_frames(log_handler)
+    pcl.wait_for_frames(multiplex_handler([log_handler, echo_handler]))
     log.critical('Pushover client finished')
 
 

@@ -22,3 +22,11 @@ def echo_handler(frm):
 def log_handler(frm):
     log.info('received frame: %s',
              frames.get(frm, 'Unknown frame ({})'.format(frm)))
+
+
+def multiplex_handler(handlers):
+    def _handler(frm):
+        for handler in handlers:
+            handler(frm)
+
+    return _handler
