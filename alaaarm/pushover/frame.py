@@ -1,0 +1,5 @@
+KEEP_ALIVE = b'#'
+NEW_MESSAGE = b'!'
+RELOAD = b'R'
+ERROR = b'E'
+ANOTHER_SESSION = b'A'
