@@ -24,9 +24,10 @@ def run():
                          config['pushover']['password'],
                          device_id=config['pushover']['device_id'])
 
-    log.info('starting PushOver client, wait for WebSocket frames')
+    log.info('starting Pushover client')
+    pcl.delete_messages()
     pcl.wait_for_frames(log_handler)
-    log.critical('PushOver client finished')
+    log.critical('Pushover client finished')
 
 
 if __name__ == '__main__':

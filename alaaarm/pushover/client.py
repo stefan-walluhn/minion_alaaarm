@@ -5,7 +5,8 @@ except:
 
 from alaaarm.pushover import api as pushover_api
 from alaaarm.pushover import frame
-from alaaarm.pushover.exceptions import DeviceRegistrationError
+from alaaarm.pushover.exceptions import (DeviceRegistrationError,
+                                         NoMessagesException)
 
 
 log = logging.getLogger()
@@ -38,7 +39,7 @@ class PushoverClient():
                 data={'secret': self.secret, 'name': 'python_test', 'os': 'O'}
             ).json()
 
-            if response['status'] == 0:
+            if response['status'] != 1:
                 raise DeviceRegistrationError(response['errors'])
 
             self._device_id = response['id']
@@ -49,11 +50,36 @@ class PushoverClient():
         response = pushover_api.get(
             'messages.json',
             params={'secret': self.secret, 'device_id': self.device_id}
-        )
+        ).json()
 
-        return response.json()
+        return response['messages']
+
+    def delete_messages(self):
+        log.info('deleting all Pushover messages for this device')
+
+        try:
+            self._update_highest_message()
+        except NoMessagesException:
+            pass
+
+    def _update_highest_message(self):
+        return pushover_api.post(
+            '/'.join(['devices',
+                      self.device_id,
+                      'update_highest_message.json']),
+            data={'secret': self.secret,
+                  'message': str(self._get_max_message_id())}
+        ).json()
+
+    def _get_max_message_id(self):
+        msg_ids = [m['id'] for m in self.get_messages()]
+        try:
+            return max(msg_ids)
+        except ValueError:
+            raise NoMessagesException()
 
     def wait_for_frames(self, handler):
+        log.info('waiting for Pushover frames')
         # pre-fetch data to reduce parallel ssl connections
         self.device_id
         self.secret
