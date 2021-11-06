@@ -1,3 +1,4 @@
+import time
 import ulogging as logging
 import usocket as socket
 
@@ -36,7 +37,13 @@ def init_watchdog(timeout):
     return WDT(timeout=timeout)
 
 
-def init_wifi(essed, password):
-    from alaaarm import wifi
+def init_wifi(essid, password):
+    import network
 
-    wifi.connect(essid, password)
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    if not wlan.isconnected():
+        wlan.connect(essid, password)
+
+        while not wlan.isconnected():
+            time.sleep(1)
