@@ -13,9 +13,10 @@ log = logging.getLogger()
 
 
 class PushoverClient():
-    def __init__(self, email, password, device_id=None):
+    def __init__(self, email, password, device_name, device_id=None):
         self.email = email
         self.password = password
+        self.device_name = device_name
 
         self._secret = None
         self._device_id = device_id
@@ -32,11 +33,12 @@ class PushoverClient():
 
     @property
     def device_id(self):
-        # XXX device `python_test` must not exists!
         if not self._device_id:
             response = pushover_api.post(
                 'devices.json',
-                data={'secret': self.secret, 'name': 'python_test', 'os': 'O'}
+                data={'secret': self.secret,
+                      'name': self.device_name,
+                      'os': 'O'}
             ).json()
 
             if response['status'] != 1:
