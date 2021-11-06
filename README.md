@@ -2,24 +2,67 @@
 
 ## Usage
 
-Ceate `config.json`:
+### Create config
+
+You need to know the following settings:
+
+* pushover account email
+* pushover account password
+* pushover device name (choose by yourself)
+* pushover device ID (see script below to gather device ID)
+
+optional wifi
+
+* wifi essid
+* wifi password
+
+optional remote syslog server
+
+* remote syslog server host
+* remote syslog server port
+
+#### create Pushover device and gather device ID by script
+
+You can make use of `create_device.py` to generate a new Pushover device and
+gather required credentials. Use python3 (not micropython) to run the script.
+
+```
+virtualenv .
+./bin/pip install -r requirements
+./bin/python create_device.py
+```
+
+`create_device.py` will generate a config snipped to use. Make sure to keep the
+device ID, since there is no way to get this information without deleting the
+device within the Pushover admin interface and re-create it afterwards.
+
+#### Create config file
+
+Ceate `config.json` in project root folder. Wifi and Syslog sections are
+optional.:
 
 ```
 {
+    "pushover": {
+        "device_id": "your_pushover_device_id",
+        "device_name": "your_pushover_device_name",
+        "email": "your_pushover_account_email",
+        "password": "your_pushover_password"
+    },
     "syslog": {
         "host": "127.0.0.1",
         "port": 514
     },
-    "pushover": {
-        "email": "your@pushover.email",
-        "password": "your_pushover_password"
+    "wifi": {
+        "essid": "your_wifi_essid",
+        "password": "your_wifi_password"
     }
 }
 ```
 
-Start client:
+### Run Pushover Open Client
 
-`micropython alaaaaaarm.py`
+`micropython main.py`
 
 ## LICENSE
 
