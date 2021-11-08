@@ -80,8 +80,7 @@ class PushoverClient():
         except ValueError:
             raise NoMessagesException()
 
-    def wait_for_frames(self, handler):
-        log.info('waiting for Pushover frames')
+    def wait_for_frames(self, handler, reconnect_after_frames=500):
         # pre-fetch data to reduce parallel ssl connections
         self.device_id
         self.secret
@@ -92,7 +91,8 @@ class PushoverClient():
                     device_id=self.device_id, secret=self.secret)
                 )
 
-                while True:
+                log.info('logged in, waiting for Pushover frames')
+                for _ in range(reconnect_after_frames):
                     response = ws.recv()
                     handler(response)
                     if response == frame.RELOAD:
@@ -109,3 +109,4 @@ class PushoverClient():
                         log.warning('another session was started, '
                                     'stop frame processing')
                         return
+                log.info('reconnecting')
