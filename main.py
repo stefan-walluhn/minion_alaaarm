@@ -10,7 +10,7 @@ from alaaarm.pushover.client import PushoverClient
 
 
 WATCHDOG_TIMEOUT_MINUTE = 2
-ALARM_GPIO = 10
+ALARM_GPIO = 16
 
 
 log = logging.getLogger()
