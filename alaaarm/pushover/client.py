@@ -80,7 +80,9 @@ class PushoverClient():
         except ValueError:
             raise NoMessagesException()
 
-    def wait_for_frames(self, handler, reconnect_after_frames=500):
+    def wait_for_frames(self, handler,
+                        reconnect_after_frames=500
+                        delete_messages_on_reconnect=True):
         # pre-fetch data to reduce parallel ssl connections
         self.device_id
         self.secret
@@ -110,5 +112,7 @@ class PushoverClient():
                                     'stop frame processing')
                         return
 
-            self.delete_messages()
+            if delete_messages_on_reconnect:
+                self.delete_messages()
+
             log.info('reconnecting')
