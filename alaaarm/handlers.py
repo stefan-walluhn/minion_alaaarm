@@ -29,7 +29,7 @@ def pin_handler(pin):
     def _handler(frm):
         if frm == frame.NEW_MESSAGE:
             pin.on()
-            time.sleep(5)
+            time.sleep(0.2)
             pin.off()
 
     return _handler

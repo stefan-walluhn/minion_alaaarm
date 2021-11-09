@@ -13,10 +13,7 @@ def init_pin(pin_number):
         log.warning('there is no hardware pin, use dummy implementation')
         from alaaarm.pin import DummyPin as Pin, DummySignal as Signal
 
-    raw_pin = Pin(pin_number, Pin.OUT, value=1)
-    pin = Signal(raw_pin, invert=True)
-
-    return pin
+    return Pin(pin_number, Pin.OUT, value=0)
 
 
 def init_syslog(host, port):
