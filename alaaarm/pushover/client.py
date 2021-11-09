@@ -109,4 +109,6 @@ class PushoverClient():
                         log.warning('another session was started, '
                                     'stop frame processing')
                         return
-                log.info('reconnecting')
+
+            self.delete_messages()
+            log.info('reconnecting')
