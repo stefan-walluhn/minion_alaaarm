@@ -2,10 +2,9 @@ import ulogging as logging
 
 from alaaarm import bootstrap
 from alaaarm.config import config
-from alaaarm.handlers import (log_handler,
-                              pin_handler,
-                              watchdog_handler,
-                              multiplex_handler)
+from alaaarm import filters
+from alaaarm import handlers
+from alaaarm.pushover import frame
 
 
 WATCHDOG_TIMEOUT_MINUTE = 2
@@ -40,9 +39,13 @@ def run():
 
     log.info('starting Pushover client')
     pushover_client.wait_for_frames(
-        multiplex_handler(log_handler,
-                          pin_handler(alarm_pin),
-                          watchdog_handler(dog))
+        handlers.multiplex_handler(
+            handlers.log_handler,
+            filters.frame_filter(frame.NEW_MESSAGE,
+                                 handlers.pin_handler(alarm_pin)),
+            filters.frame_filter(frame.KEEP_ALIVE,
+                                 handlers.watchdog_handler(dog))
+        )
     )
     log.critical('Pushover client finished')
 

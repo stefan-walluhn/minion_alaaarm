@@ -27,18 +27,16 @@ def log_handler(frm):
 
 def pin_handler(pin):
     def _handler(frm):
-        if frm == frame.NEW_MESSAGE:
-            pin.on()
-            time.sleep(0.2)
-            pin.off()
+        pin.on()
+        time.sleep(0.2)
+        pin.off()
 
     return _handler
 
 
 def watchdog_handler(dog):
     def _handler(frm):
-        if frm == frame.KEEP_ALIVE:
-            dog.feed()
+        dog.feed()
 
     return _handler
 
