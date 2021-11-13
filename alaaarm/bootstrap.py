@@ -27,6 +27,15 @@ def init_remote_syslog(host, port):
     log.addHandler(RemoteHandler(host=host, port=port))
 
 
+def init_rtc():
+    try:
+        import ntptime
+    except ImportError:
+        return
+
+    ntptime.settime()
+
+
 def init_watchdog(timeout):
     try:
         from machine import WDT
