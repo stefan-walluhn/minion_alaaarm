@@ -49,6 +49,10 @@ optional.:
         "email": "your_pushover_account_email",
         "password": "your_pushover_password"
     },
+    "do_not_disturb": {
+        "before": 7,
+        "after": 22
+    },
     "syslog": {
         "host": "127.0.0.1",
         "port": 514

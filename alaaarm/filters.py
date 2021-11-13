@@ -21,5 +21,4 @@ def do_not_disturb_filter(before_hour, after_hour, handler):
         else:
             log.info('do not disturb, not triggering handler')
 
-
     return _filter
