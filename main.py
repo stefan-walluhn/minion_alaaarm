@@ -30,7 +30,6 @@ def run():
                             config['wifi']['password'])
         dog.feed()
 
-
     pushover_client = bootstrap.init_pushover_client(
         config['pushover']['email'],
         config['pushover']['password'],
