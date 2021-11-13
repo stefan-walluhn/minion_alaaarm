@@ -1,3 +1,4 @@
+import sys
 import usocket as socket
 
 
@@ -22,17 +23,34 @@ class SyslogMessage:
 
 
 class SyslogClient:
-    def __init__(self, dest):
-        self.dest = dest
+    def __init__(self, host, port):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        self._host = host
+        self._port = port
+        self._dst = None
+
+    @property
+    def dst(self):
+        if not self._dst:
+            self._dst = self._resolve_dst()
+
+        return self._dst
+
     def send(self, msg):
-        self.socket.sendto(str(msg).encode(), self.dest[0][4])
+        if self.dst:
+            self.socket.sendto(str(msg).encode(), self.dst[0][4])
+
+    def _resolve_dst(self):
+        try:
+            return socket.getaddrinfo(self._host, self._port)
+        except OSError:
+            return None
 
 
-class SyslogHandler:
-    def __init__(self, dest=socket.getaddrinfo('localhost', 514)):
-        self.syslog_client = SyslogClient(dest)
+class RemoteHandler:
+    def __init__(self, host='localhost', port=514):
+        self.syslog_client = SyslogClient(host, port)
 
     def emit(self, record):
         self.syslog_client.send(self._to_syslog_message(record))
@@ -53,3 +71,9 @@ class SyslogHandler:
         }
 
         return levelname_to_severity[levelname]
+
+
+class ConsoleHandler:
+    def emit(self, record):
+        print(record.levelname, ":", record.name, ":", record.message,
+              sep="", file=sys.stderr)

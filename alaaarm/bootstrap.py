@@ -1,6 +1,7 @@
 import time
 import ulogging as logging
-import usocket as socket
+
+from alaaarm.pushover.client import PushoverClient
 
 
 log = logging.getLogger()
@@ -8,19 +9,22 @@ log = logging.getLogger()
 
 def init_pin(pin_number):
     try:
-        from machine import Pin, Signal
+        from machine import Pin
     except ImportError:
         log.warning('there is no hardware pin, use dummy implementation')
-        from alaaarm.pin import DummyPin as Pin, DummySignal as Signal
+        from alaaarm.pin import DummyPin as Pin
 
     return Pin(pin_number, Pin.OUT, value=0)
 
 
-def init_syslog(host, port):
-    from alaaarm.logging import SyslogHandler
+def init_console_syslog():
+    from alaaarm.logging import ConsoleHandler
+    log.addHandler(ConsoleHandler())
 
-    syslog_server = socket.getaddrinfo(host, port)
-    log.addHandler(SyslogHandler(dest=syslog_server))
+
+def init_remote_syslog(host, port):
+    from alaaarm.logging import RemoteHandler
+    log.addHandler(RemoteHandler(host=host, port=port))
 
 
 def init_watchdog(timeout):
@@ -43,3 +47,10 @@ def init_wifi(essid, password):
 
         while not wlan.isconnected():
             time.sleep(1)
+
+
+def init_pushover_client(email, password, device_name, device_id):
+    client = PushoverClient(email, password, device_name, device_id=device_id)
+    client.delete_messages()
+
+    return client

@@ -43,7 +43,7 @@ def watchdog_handler(dog):
     return _handler
 
 
-def multiplex_handler(handlers):
+def multiplex_handler(*handlers):
     def _handler(frm):
         for handler in handlers:
             handler(frm)
