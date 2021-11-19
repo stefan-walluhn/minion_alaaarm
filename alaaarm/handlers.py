@@ -1,7 +1,7 @@
 import time
 import ulogging as logging
 
-from alaaarm.pushover.frame import Frame, frame_to_str
+from alaaarm.pushover.frame import frame_to_str
 
 
 log = logging.getLogger()

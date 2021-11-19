@@ -3,7 +3,6 @@ try:
 except ImportError:
     import ulogging as logging
 
-from alaaarm.pushover import api as pushover_api
 from alaaarm.pushover.api import pushover_api
 from alaaarm.pushover.frame import Frame
 from alaaarm.pushover.exceptions import (DeviceRegistrationError,

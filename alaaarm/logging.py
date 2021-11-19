@@ -3,11 +3,11 @@ import usocket as socket
 
 
 class Severity:
-  CRITICAL = 2
-  ERROR = 3
-  WARN = 4
-  INFO = 6
-  DEBUG = 7
+    CRITICAL = 2
+    ERROR = 3
+    WARN = 4
+    INFO = 6
+    DEBUG = 7
 
 
 class SyslogMessage:
