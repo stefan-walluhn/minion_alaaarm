@@ -4,6 +4,7 @@ except ImportError:
     import ulogging as logging
 
 from alaaarm.pushover import api as pushover_api
+from alaaarm.pushover.api import pushover_api
 from alaaarm.pushover.frame import Frame
 from alaaarm.pushover.exceptions import (DeviceRegistrationError,
                                          NoMessagesException)
@@ -24,22 +25,16 @@ class PushoverClient():
     @property
     def secret(self):
         if not self._secret:
-            self._secret = pushover_api.post(
-                'users/login.json',
-                data={'email': self.email, 'password': self.password}
-            ).json()['secret']
+            response = pushover_api.login(self.email, self.password)
+            self._secret = response['secret']
 
         return self._secret
 
     @property
     def device_id(self):
         if not self._device_id:
-            response = pushover_api.post(
-                'devices.json',
-                data={'secret': self.secret,
-                      'name': self.device_name,
-                      'os': 'O'}
-            ).json()
+            response = pushover_api.create_device(self.secret,
+                                                  self.device_name)
 
             if response['status'] != 1:
                 raise DeviceRegistrationError(response['errors'])
@@ -49,10 +44,7 @@ class PushoverClient():
         return self._device_id
 
     def get_messages(self):
-        response = pushover_api.get(
-            'messages.json',
-            params={'secret': self.secret, 'device_id': self.device_id}
-        ).json()
+        response = pushover_api.get_messages(self.secret, self.device_id)
 
         return response['messages']
 
@@ -65,13 +57,9 @@ class PushoverClient():
             pass
 
     def _update_highest_message(self):
-        return pushover_api.post(
-            '/'.join(['devices',
-                      self.device_id,
-                      'update_highest_message.json']),
-            data={'secret': self.secret,
-                  'message': str(self._get_max_message_id())}
-        ).json()
+        return pushover_api.update_highest_message(self.secret,
+                                                   self.device_id,
+                                                   self._get_max_message_id())
 
     def _get_max_message_id(self):
         msg_ids = [m['id'] for m in self.get_messages()]
