@@ -9,6 +9,7 @@ from alaaarm.pushover.frame import Frame
 
 WATCHDOG_TIMEOUT_MINUTE = 2
 ALARM_GPIO = 16
+NTP_SYNC_EVERY_HOUR = 1
 
 
 log = logging.getLogger()
@@ -31,7 +32,7 @@ def run():
                                      config['syslog']['port'])
         dog.feed()
 
-    bootstrap.init_rtc()
+    bootstrap.init_rtc(NTP_SYNC_EVERY_HOUR * 3600 * 1000)
 
     pushover_client = bootstrap.init_pushover_client(
         config['pushover']['email'],
