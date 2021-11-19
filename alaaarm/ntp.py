@@ -14,6 +14,6 @@ def sync():
 def sync_periodic(period):
     Timer(0).init(period=period,
                   mode=Timer.PERIODIC,
-                  callback=lambda t: ntp.sync())
+                  callback=lambda t: sync())
 
     sync()
