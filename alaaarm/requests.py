@@ -25,7 +25,7 @@ class Requests:
 
     @staticmethod
     def _url_encode_data(data):
-        return '&'.join(["=".join(i) for i in data.items()])
+        return '&'.join(["=".join([k, str(v)]) for k, v in data.items()])
 
 
 get = Requests.get
