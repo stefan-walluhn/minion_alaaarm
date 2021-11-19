@@ -16,17 +16,19 @@ log = logging.getLogger()
 
 def run():
     alarm_pin = bootstrap.init_pin(ALARM_GPIO)
+
     dog = bootstrap.init_watchdog(WATCHDOG_TIMEOUT_MINUTE * 60 * 1000)
 
     bootstrap.init_console_syslog()
-    if 'syslog' in config:
-        bootstrap.init_remote_syslog(config['syslog']['host'],
-                                     config['syslog']['port'])
-        dog.feed()
 
     if 'wifi' in config:
         bootstrap.init_wifi(config['wifi']['essid'],
                             config['wifi']['password'])
+        dog.feed()
+
+    if 'syslog' in config:
+        bootstrap.init_remote_syslog(config['syslog']['host'],
+                                     config['syslog']['port'])
         dog.feed()
 
     bootstrap.init_rtc()

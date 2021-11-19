@@ -29,11 +29,12 @@ def init_remote_syslog(host, port):
 
 def init_rtc():
     try:
-        import ntptime
+        from alaaarm import ntp
     except ImportError:
+        log.warning('there is no hardware timer, not syncing rtc')
         return
 
-    ntptime.settime()
+    ntp.sync_periodic(3600000)
 
 
 def init_watchdog(timeout):

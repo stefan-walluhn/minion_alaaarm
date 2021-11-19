@@ -65,7 +65,7 @@ class RemoteHandler:
         levelname_to_severity = {
             'CRITICAL': 2,
             'ERROR': 3,
-            'WARNING': 4,
+            'WARN': 4,
             'INFO': 6,
             'DEBUG': 7,
         }
