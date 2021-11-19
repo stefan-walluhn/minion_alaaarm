@@ -13,7 +13,7 @@ log = logging.getLogger()
 
 
 class PushoverClient():
-    def __init__(self, email, password, device_name, device_id=None):
+    def __init__(self, email, password, device_name=None, device_id=None):
         self.email = email
         self.password = password
         self.device_name = device_name

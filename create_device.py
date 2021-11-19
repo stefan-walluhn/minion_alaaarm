@@ -10,11 +10,9 @@ from alaaarm.pushover.exceptions import DeviceRegistrationError
 @click.option('--password', prompt=True, hide_input=True)
 @click.option('-d', '--device-name', prompt=True, help="device name")
 def configure(email, password, device_name):
-    config = {'pushover': {'email': email,
-                           'password': password,
-                           'device_name': device_name}}
+    config = {'pushover': {'email': email, 'password': password}}
 
-    pushover_client = PushoverClient(email, password, device_name)
+    pushover_client = PushoverClient(email, password, device_name=device_name)
     try:
         config['pushover']['device_id'] = pushover_client.device_id
     except DeviceRegistrationError as e:

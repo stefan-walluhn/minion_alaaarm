@@ -59,8 +59,8 @@ def init_wifi(essid, password):
             time.sleep(1)
 
 
-def init_pushover_client(email, password, device_name, device_id):
-    client = PushoverClient(email, password, device_name, device_id=device_id)
+def init_pushover_client(email, password, device_id):
+    client = PushoverClient(email, password, device_id=device_id)
     client.delete_messages()
 
     return client

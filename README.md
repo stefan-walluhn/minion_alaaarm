@@ -45,7 +45,6 @@ optional.:
 {
     "pushover": {
         "device_id": "your_pushover_device_id",
-        "device_name": "your_pushover_device_name",
         "email": "your_pushover_account_email",
         "password": "your_pushover_password"
     },

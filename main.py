@@ -37,7 +37,6 @@ def run():
     pushover_client = bootstrap.init_pushover_client(
         config['pushover']['email'],
         config['pushover']['password'],
-        config['pushover']['device_name'],
         config['pushover']['device_id']
     )
     dog.feed()
