@@ -76,9 +76,7 @@ class PushoverClient():
 
         while True:
             with pushover_api.websocket() as ws:
-                ws.send('login:{device_id}:{secret}\n'.format(
-                    device_id=self.device_id, secret=self.secret)
-                )
+                ws.send(f'login:{self.device_id}:{self.secret}\n')
 
                 log.info('logged in, waiting for Pushover frames')
                 for _ in range(reconnect_after_frames):
