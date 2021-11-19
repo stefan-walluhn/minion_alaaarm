@@ -4,7 +4,7 @@ from alaaarm import bootstrap
 from alaaarm.config import config
 from alaaarm import filters
 from alaaarm import handlers
-from alaaarm.pushover import frame
+from alaaarm.pushover.frame import Frame
 
 
 WATCHDOG_TIMEOUT_MINUTE = 2
@@ -46,14 +46,14 @@ def run():
         handlers.multiplex_handler(
             handlers.log_handler,
             filters.frame_filter(
-                frame.NEW_MESSAGE,
+                Frame.NEW_MESSAGE,
                 filters.do_not_disturb_filter(
                     config['do_not_disturb']['before'],
                     config['do_not_disturb']['after'],
                     handlers.pin_handler(alarm_pin)
                 )
             ),
-            filters.frame_filter(frame.KEEP_ALIVE,
+            filters.frame_filter(Frame.KEEP_ALIVE,
                                  handlers.watchdog_handler(dog))
         )
     )

@@ -4,7 +4,7 @@ except ImportError:
     import ulogging as logging
 
 from alaaarm.pushover import api as pushover_api
-from alaaarm.pushover import frame
+from alaaarm.pushover.frame import Frame
 from alaaarm.pushover.exceptions import (DeviceRegistrationError,
                                          NoMessagesException)
 
@@ -81,7 +81,7 @@ class PushoverClient():
             raise NoMessagesException()
 
     def wait_for_frames(self, handler,
-                        reconnect_after_frames=500,
+                        reconnect_after_frames=1000,
                         delete_messages_on_reconnect=True):
         # pre-fetch data to reduce parallel ssl connections
         self.device_id
@@ -97,16 +97,16 @@ class PushoverClient():
                 for _ in range(reconnect_after_frames):
                     response = ws.recv()
                     handler(response)
-                    if response == frame.RELOAD:
+                    if response == Frame.RELOAD:
                         # reload request, reconnect
                         log.warning('received reload request, reconnecting')
                         break
-                    if response == frame.ERROR:
+                    if response == Frame.ERROR:
                         # permanent error, terminate
                         log.warning('received permanent error, '
                                     'stop frame processing')
                         return
-                    if response == frame.ANOTHER_SESSION:
+                    if response == Frame.ANOTHER_SESSION:
                         # session closed, terminate
                         log.warning('another session was started, '
                                     'stop frame processing')

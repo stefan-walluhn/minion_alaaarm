@@ -1,28 +1,17 @@
 import time
 import ulogging as logging
 
-from alaaarm.pushover import frame
+from alaaarm.pushover.frame import Frame, frame_to_str
 
 
 log = logging.getLogger()
 
 
-frames = {
-    frame.KEEP_ALIVE: 'KEEP ALIVE',
-    frame.NEW_MESSAGE: 'NEW MESSAGE',
-    frame.RELOAD: 'RELOAD',
-    frame.ERROR: 'ERROR',
-    frame.ANOTHER_SESSION: 'ANOTHER SESSION'
-}
-
-
-def echo_handler(frm):
-    print(frames.get(frm, 'Unknown frame: {}'.format(frm)))
-
-
 def log_handler(frm):
-    log.info('received frame: %s',
-             frames.get(frm, 'Unknown frame ({})'.format(frm)))
+    try:
+        log.info('received frame: %s', frame_to_str(frm))
+    except KeyError:
+        log.warning('received unknown frame: %s', frm.decode())
 
 
 def pin_handler(pin):
