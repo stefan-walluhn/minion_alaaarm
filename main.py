@@ -9,7 +9,7 @@ from alaaarm.pushover.frame import Frame
 
 WATCHDOG_TIMEOUT_MINUTE = 2
 ALARM_GPIO = 16
-NTP_SYNC_EVERY_HOUR = 1
+NTP_SYNC_EVERY_HOUR = 12
 
 
 log = logging.getLogger()
