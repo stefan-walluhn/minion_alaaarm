@@ -21,13 +21,6 @@ class Gateway:
 
         return response.json()
 
-    def get_messages(self, secret, device_id):
-        response = requests.get(
-            self._to_api_url('messages.json'),
-            params={'secret': secret, 'device_id': device_id})
-
-        return response.json()
-
     def update_highest_message(self, secret, device_id, message_id):
         response = requests.post(
             self._to_api_url(
