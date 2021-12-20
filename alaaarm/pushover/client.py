@@ -8,7 +8,6 @@ from alaaarm.pushover.frame import Frame
 from alaaarm.pushover.exceptions import DeviceRegistrationError
 
 
-
 log = logging.getLogger()
 
 
@@ -47,7 +46,7 @@ class PushoverClient():
 
         pushover_api.update_highest_message(self.secret,
                                             self.device_id,
-                                            (1 << 128) - 1)
+                                            1 << 127)
 
     def wait_for_frames(self, handler,
                         reconnect_after_frames=1000,
