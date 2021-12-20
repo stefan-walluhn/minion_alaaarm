@@ -1,4 +1,3 @@
-import sys
 try:
     import logging
 except ImportError:
@@ -48,7 +47,7 @@ class PushoverClient():
 
         pushover_api.update_highest_message(self.secret,
                                             self.device_id,
-                                            sys.maxsize)
+                                            (1 << 128) - 1)
 
     def wait_for_frames(self, handler,
                         reconnect_after_frames=1000,
